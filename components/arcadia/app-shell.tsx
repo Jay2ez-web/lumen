@@ -136,9 +136,9 @@ export function ArcadiaApp({ view, slug, initialQuery = '', initialCategory = 'A
         <div className="-mt-1 mb-10 flex gap-2 overflow-x-auto pb-1" aria-label="Browse game categories">
           {categories.slice(1, 8).map((item, index) => <a href={buildExploreHref('', item)} key={item} className={`shrink-0 rounded-full border px-4 py-2.5 text-xs transition hover:border-violet-300/40 hover:bg-violet-500/10 ${index === 0 ? 'border-violet-300/30 bg-violet-500/10 text-violet-200' : 'border-white/[.1] text-white/60'}`}>{item}</a>)}
         </div>
-        <GameRow title="Featured samples" eyebrow="A FIRST LOOK AT THE ARCADIA CATALOG" games={featuredGames} savedSlugs={saved} onSave={toggleSave} onPlay={startGame} returnTo={exploreHref} />
-        <GameRow title="Multiplayer ideas" eyebrow="BUILT FOR SHARED PLAY" games={games.filter((game) => game.multiplayer)} savedSlugs={saved} onSave={toggleSave} onPlay={startGame} returnTo={exploreHref} />
-        <GameRow title="Recently added" eyebrow="FRESH SAMPLE ENTRIES" games={games.filter((game) => Boolean(game.addedAt)).slice(0, 5)} savedSlugs={saved} onSave={toggleSave} onPlay={startGame} returnTo={exploreHref} />
+        <GameRow title="Featured games" eyebrow="PLAY THE ARCADIA CATALOG" games={featuredGames} savedSlugs={saved} onSave={toggleSave} onPlay={startGame} returnTo={exploreHref} />
+        <GameRow title="Multiplayer games" eyebrow="BUILT FOR SHARED PLAY" games={games.filter((game) => game.multiplayer)} savedSlugs={saved} onSave={toggleSave} onPlay={startGame} returnTo={exploreHref} />
+        <GameRow title="Recently added" eyebrow="RECENTLY ADDED GAMES" games={games.filter((game) => Boolean(game.addedAt)).slice(0, 5)} savedSlugs={saved} onSave={toggleSave} onPlay={startGame} returnTo={exploreHref} />
       </main>
     </>}
     {view === 'explore' && <ExplorePage games={filteredGames.slice(0, 12)} count={filteredGames.length} loading={!ready} query={query} category={category} sort={sort} onQueryChange={setQuery} onCategoryChange={setCategory} onSortChange={setSort} onReset={() => { setQuery(''); setCategory('All'); setSort('Featured') }} savedSlugs={saved} onSave={toggleSave} onPlay={startGame} returnTo={exploreHref} />}
