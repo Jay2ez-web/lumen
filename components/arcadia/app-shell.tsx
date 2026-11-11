@@ -86,7 +86,7 @@ function Navbar({ pathname, mobileOpen, setMobileOpen, query, setQuery }: { path
 }
 
 function Art({ game, className = '' }: { game: Game; className?: string }) {
-  return <div className={`game-art relative isolate overflow-hidden ${className}`} style={{ background: game.artwork }}><div className="art-orb" style={{ background: `radial-gradient(circle, ${game.accent}8c 0%, ${game.accent}20 36%, transparent 70%)` }} /><div className="art-grid" /><span className="art-symbol" style={{ color: game.accent }}>{game.symbol}</span><span className="art-horizon" /></div>
+  return <div className={`game-art relative isolate overflow-hidden ${className}`} style={{ background: game.artwork }}><div className="art-orb" style={{ background: `radial-gradient(circle, ${game.accent}8c 0%, ${game.accent}20 36%, transparent 70%)` }} /><div className="art-grid" /><span className="art-symbol" style={{ color: game.accent }}>{game.symbol ?? '◈'}</span><span className="art-horizon" /></div>
 }
 
 function GameCard({ game, saved, onSave, compact = false }: { game: Game; saved: boolean; onSave: () => void; compact?: boolean }) {
@@ -153,7 +153,7 @@ function GameDetail({ game, related, saved, onSave, onPlay }: { game: Game; rela
   </main>
 }
 
-const approvedEmbedHosts = new Set(['hexgl.bkcore.com', 'www.crazygames.com'])
+const approvedEmbedHosts = new Set(['client.eaglercraft.win', 'hexgl.bkcore.com', 'www.crazygames.com', 'playgta5.net', 'playgta5.pro', 'csjs.live', 'wasmarcade.com', 'selenite1.freetls.fastly.net', 'territorial.io', 'openfront.io', 'orteil.dashnet.org', 'littlealchemy.com', 'slither.io', 'play.famobi.com', 'freeasteroids.org', 'worldsbiggestpacman.com'])
 
 function GameEmbed({ game }: { game: Game }) {
   const [loading, setLoading] = useState(Boolean(game.embedUrl))
@@ -169,7 +169,7 @@ function GameEmbed({ game }: { game: Game }) {
 
   if (!approvedUrl) {
     return <div className="relative z-10 mx-5 flex max-w-md flex-col items-center px-8 text-center">
-      <span className="grid size-12 place-items-center rounded-2xl bg-white/[.06] text-2xl text-violet-300">{game.symbol}</span>
+      <span className="grid size-12 place-items-center rounded-2xl bg-white/[.06] text-2xl text-violet-300">{game.symbol ?? '◈'}</span>
       <h2 className="mt-4 text-lg font-semibold">Play on {game.sourceName}</h2>
       <p className="mt-2 text-sm leading-6 text-white/50">This publisher serves the game on its own site rather than inside Arcadia.</p>
       <a href={game.sourceUrl} target="_blank" rel="noopener noreferrer" className="mt-5 inline-flex items-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-semibold text-[#11121a] transition hover:bg-violet-100">Open game at source <ArrowRight className="size-4" /></a>
@@ -178,7 +178,8 @@ function GameEmbed({ game }: { game: Game }) {
 
   return <div className="absolute inset-0 bg-black">
     <iframe title={`${game.title} by ${game.sourceName}`} src={approvedUrl} className="size-full border-0" allow="autoplay; fullscreen; gamepad; accelerometer; gyroscope; picture-in-picture" allowFullScreen referrerPolicy="strict-origin-when-cross-origin" onLoad={() => setLoading(false)} />
-    {loading && <div className="pointer-events-none absolute inset-0 grid place-items-center bg-[#0a0b13] text-sm text-white/55"><span className="flex items-center gap-3"><span className="size-4 animate-spin rounded-full border-2 border-white/20 border-t-violet-300"/>Loading publisher game…</span></div>}
+    {loading && <div className="pointer-events-none absolute inset-0 grid place-items-center bg-[#0a0b13] text-sm text-white/55"><span className="flex items-center gap-3"><span className="size-4 animate-spin rounded-full border-2 border-white/20 border-t-violet-300"/>Loading game from {game.sourceName}…</span></div>}
+    <a href={game.sourceUrl} target="_blank" rel="noopener noreferrer" className="absolute bottom-3 right-3 z-10 rounded-lg bg-black/70 px-3 py-2 text-xs font-medium text-white/75 transition hover:bg-black hover:text-white">Open at source <ArrowRight className="ml-1 inline size-3" /></a>
   </div>
 }
 
