@@ -4,7 +4,7 @@ import './globals.css'
 
 export const metadata: Metadata = {
   title: { default: 'Arcadia — Play a little more', template: '%s | Arcadia' },
-  description: 'Browse original game concepts, save favorites, and preview safe local sample builds in Arcadia.',
+  description: 'Play browser games from their listed providers, save favorites, and explore Arcadia’s curated catalog.',
   generator: 'Arcadia',
   icons: {
     icon: [

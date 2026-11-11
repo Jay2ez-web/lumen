@@ -7,7 +7,7 @@ type PageProps = { params: Promise<{ slug: string }>; searchParams: RouteSearchP
 export async function generateMetadata({ params }: Pick<PageProps, 'params'>): Promise<Metadata> {
   const { slug } = await params
   const game = gameBySlug(slug)
-  return { title: game ? `${game.title} — Arcadia` : 'Game not found — Arcadia', description: game?.description ?? 'Explore sample games in Arcadia.' }
+  return { title: game ? `${game.title} — Arcadia` : 'Game not found — Arcadia', description: game?.description ?? 'Explore browser games in Arcadia.' }
 }
 
 export default async function GamePage({ params, searchParams }: PageProps) {

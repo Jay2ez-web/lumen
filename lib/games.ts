@@ -1,4 +1,4 @@
-export type GameSourceType = 'approved-embed' | 'self-hosted' | 'placeholder'
+export type GameSourceType = 'approved-embed' | 'external-link' | 'self-hosted' | 'placeholder'
 
 export type Game = {
   slug: string
@@ -9,6 +9,7 @@ export type Game = {
   thumbnailUrl: string
   bannerUrl: string
   playUrl: string
+  launchMode?: 'iframe' | 'new-tab'
   sourceType: GameSourceType
   provider: string
   licenseUrl: string | null
@@ -20,33 +21,171 @@ export type Game = {
   symbol: string
 }
 
-type SampleGame = Omit<Game, 'thumbnailUrl' | 'bannerUrl' | 'playUrl' | 'sourceType' | 'provider' | 'licenseUrl'>
+type HostedGame = Omit<Game, 'thumbnailUrl' | 'bannerUrl' | 'sourceType'>
 
-function sampleGame(game: SampleGame): Game {
+function hostedGame(game: HostedGame, sourceType: GameSourceType = 'approved-embed'): Game {
   return {
     ...game,
-    thumbnailUrl: `/game-art/${game.slug}.svg?v=2`,
-    bannerUrl: `/game-art/${game.slug}.svg?format=banner&v=2`,
-    playUrl: `/game-preview/${game.slug}`,
-    sourceType: 'placeholder',
-    provider: 'Arcadia sample catalog',
-    licenseUrl: null,
+    thumbnailUrl: `/game-thumbnails/${game.slug}.png`,
+    bannerUrl: `/game-thumbnails/${game.slug}.png`,
+    sourceType,
+    launchMode: game.launchMode ?? (sourceType === 'external-link' ? 'new-tab' : 'iframe'),
   }
 }
 
 export const games: Game[] = [
-  sampleGame({ slug: 'nebula-drift', title: 'Nebula Drift', genre: 'Racing', description: 'Thread a sleek starship through luminous asteroid fields and chase a clean lap.', tags: ['Racing', 'Featured'], featured: true, multiplayer: false, addedAt: '2026-11-08', accent: '#b88cff', secondaryAccent: '#366fff', symbol: '◈' }),
-  sampleGame({ slug: 'mosslight-grove', title: 'Mosslight Grove', genre: 'Adventure', description: 'Explore a quiet bioluminescent forest, uncover small secrets, and find your way home.', tags: ['Adventure', 'Exploration'], featured: true, multiplayer: false, addedAt: '2026-11-05', accent: '#72e6b2', secondaryAccent: '#236c74', symbol: '✳' }),
-  sampleGame({ slug: 'circuit-breaker', title: 'Circuit Breaker', genre: 'Arcade', description: 'Connect bright circuit nodes before the board runs out of room.', tags: ['Arcade', 'Puzzle'], featured: false, multiplayer: false, addedAt: '2026-11-02', accent: '#63ddff', secondaryAccent: '#5d59ed', symbol: '⌁' }),
-  sampleGame({ slug: 'starforge-tactics', title: 'Starforge Tactics', genre: 'Strategy', description: 'Plan a few moves ahead and guide your tiny fleet through a tactical skirmish.', tags: ['Strategy', 'Featured'], featured: true, multiplayer: true, addedAt: '2026-10-30', accent: '#ff9b70', secondaryAccent: '#9a49a8', symbol: '✦' }),
-  sampleGame({ slug: 'moonbase-mahjong', title: 'Moonbase Mahjong', genre: 'Puzzle', description: 'Pair calm lunar tiles and clear a tidy path through the station.', tags: ['Puzzle', 'Casual'], featured: false, multiplayer: false, addedAt: '2026-10-25', accent: '#a0c7ff', secondaryAccent: '#614eb1', symbol: '▧' }),
-  sampleGame({ slug: 'emberfall-arena', title: 'Emberfall Arena', genre: 'Action', description: 'Dodge sweeping hazards and collect sparks in a compact arena challenge.', tags: ['Action', 'Arcade'], featured: false, multiplayer: true, addedAt: '2026-10-21', accent: '#ff8b6d', secondaryAccent: '#bd356d', symbol: '✺' }),
-  sampleGame({ slug: 'tiny-railway', title: 'Tiny Railway', genre: 'Simulation', description: 'Lay a winding route between miniature stations without creating a traffic jam.', tags: ['Simulation', 'Strategy'], featured: false, multiplayer: false, addedAt: '2026-10-18', accent: '#f1cd7b', secondaryAccent: '#3b9b90', symbol: '⌁' }),
-  sampleGame({ slug: 'cloudbound-karting', title: 'Cloudbound Karting', genre: 'Racing', description: 'Take a quick lap over the clouds and keep your little racer on the track.', tags: ['Racing', 'Multiplayer'], featured: false, multiplayer: true, addedAt: '2026-10-12', accent: '#ff9dc9', secondaryAccent: '#587be9', symbol: '↗' }),
-  sampleGame({ slug: 'void-runner', title: 'Void Runner', genre: 'Arcade', description: 'Dash through a shifting neon corridor and react to every turn.', tags: ['Arcade', 'Action'], featured: false, multiplayer: false, addedAt: '2026-10-09', accent: '#cf8eff', secondaryAccent: '#4145ad', symbol: '⟡' }),
-  sampleGame({ slug: 'runeweaver', title: 'Runeweaver', genre: 'Role-playing', description: 'Combine elemental runes and shape a short, storybook quest.', tags: ['Role-playing', 'Adventure'], featured: false, multiplayer: false, addedAt: '2026-10-03', accent: '#9bf0dc', secondaryAccent: '#4160a9', symbol: '⌘' }),
-  sampleGame({ slug: 'pocket-garden', title: 'Pocket Garden', genre: 'Casual', description: 'Arrange a few seeds, tend a tiny garden, and watch it fill with color.', tags: ['Casual', 'Simulation'], featured: false, multiplayer: false, addedAt: '2026-09-27', accent: '#a8e786', secondaryAccent: '#598753', symbol: '❋' }),
-  sampleGame({ slug: 'astro-hoops', title: 'Astro Hoops', genre: 'Sports', description: 'Line up a zero-gravity shot and send the ball through a floating hoop.', tags: ['Sports', 'Arcade'], featured: false, multiplayer: true, addedAt: '2026-09-20', accent: '#ffc978', secondaryAccent: '#e2607e', symbol: '◎' }),
+  hostedGame({
+    slug: 'eaglercraft-112',
+    title: 'Eaglercraft 1.12',
+    genre: 'Sandbox',
+    description: 'A browser-hosted block-building sandbox client loaded from its existing game host.',
+    tags: ['Sandbox', 'Featured', 'Multiplayer'],
+    playUrl: 'https://client.eaglercraft.win/eagler-files/wasm/1.12/Main/index.html',
+    provider: 'Eaglercraft host',
+    licenseUrl: null,
+    featured: true,
+    multiplayer: true,
+    addedAt: '2026-11-11',
+    accent: '#9fe0a0',
+    secondaryAccent: '#43704a',
+    symbol: '▦',
+  }, 'external-link'),
+  hostedGame({
+    slug: 'territorial-io',
+    title: 'Territorial.io',
+    genre: 'Strategy',
+    description: 'Expand your territory, balance your growth, and compete for control of the map.',
+    tags: ['Strategy', 'Multiplayer'],
+    playUrl: 'https://territorial.io/',
+    provider: 'Territorial.io',
+    licenseUrl: null,
+    featured: true,
+    multiplayer: true,
+    accent: '#73d6ff',
+    secondaryAccent: '#267cb4',
+    symbol: '◉',
+  }),
+  hostedGame({
+    slug: 'openfront',
+    title: 'OpenFront.io',
+    genre: 'Strategy',
+    description: 'A real-time strategy game about diplomacy, expansion, and competing fronts.',
+    tags: ['Strategy', 'Multiplayer'],
+    playUrl: 'https://openfront.io/',
+    provider: 'OpenFront',
+    licenseUrl: null,
+    featured: true,
+    multiplayer: true,
+    accent: '#78e7d0',
+    secondaryAccent: '#197b83',
+    symbol: '✦',
+  }, 'external-link'),
+  hostedGame({
+    slug: 'cookie-clicker',
+    title: 'Cookie Clicker',
+    genre: 'Idle',
+    description: 'Build a cookie empire in this classic incremental game.',
+    tags: ['Idle', 'Casual'],
+    playUrl: 'https://orteil.dashnet.org/cookieclicker/',
+    provider: 'Orteil',
+    licenseUrl: null,
+    featured: false,
+    multiplayer: false,
+    accent: '#f2c68a',
+    secondaryAccent: '#a45b3c',
+    symbol: '◉',
+  }),
+  hostedGame({
+    slug: 'little-alchemy',
+    title: 'Little Alchemy',
+    genre: 'Puzzle',
+    description: 'Combine simple elements and discover new materials and objects.',
+    tags: ['Puzzle', 'Casual'],
+    playUrl: 'https://littlealchemy.com',
+    provider: 'Little Alchemy',
+    licenseUrl: null,
+    featured: false,
+    multiplayer: false,
+    accent: '#9cc9e9',
+    secondaryAccent: '#4f70a5',
+    symbol: '◇',
+  }),
+  hostedGame({
+    slug: 'slither-io',
+    title: 'Slither.io',
+    genre: 'Arcade',
+    description: 'Grow your snake and outmaneuver other players in a fast browser arena.',
+    tags: ['Arcade', 'Multiplayer'],
+    playUrl: 'https://slither.io/',
+    provider: 'Slither.io',
+    licenseUrl: null,
+    featured: true,
+    multiplayer: true,
+    accent: '#8ee49e',
+    secondaryAccent: '#47a878',
+    symbol: '↝',
+  }),
+  hostedGame({
+    slug: '10-bullets',
+    title: '10 Bullets',
+    genre: 'Arcade',
+    description: 'Time one perfect shot and set off a chain reaction in this quick-fire arcade challenge.',
+    tags: ['Arcade', 'New'],
+    playUrl: 'https://www.crazygames.com/embed/10-bullets-html-5',
+    provider: 'CrazyGames',
+    licenseUrl: null,
+    featured: false,
+    multiplayer: false,
+    addedAt: '2026-11-11',
+    accent: '#bf9dff',
+    secondaryAccent: '#5542b3',
+    symbol: '✺',
+  }),
+  hostedGame({
+    slug: 'hexgl',
+    title: 'HexGL',
+    genre: 'Racing',
+    description: 'Race a high-speed anti-gravity ship through a luminous future city in this open-source WebGL racer.',
+    tags: ['Racing', 'Open source'],
+    playUrl: 'https://hexgl.bkcore.com/play/',
+    provider: 'bkcore',
+    licenseUrl: null,
+    featured: true,
+    multiplayer: false,
+    accent: '#ec73d5',
+    secondaryAccent: '#5224a2',
+    symbol: '◈',
+  }),
+  hostedGame({
+    slug: 'tina-detective',
+    title: 'Tina Detective',
+    genre: 'Puzzle',
+    description: 'Find clues and solve a lighthearted hidden-object mystery.',
+    tags: ['Puzzle', 'Adventure'],
+    playUrl: 'https://play.famobi.com/tina-detective/A1000-10',
+    provider: 'Famobi',
+    licenseUrl: null,
+    featured: false,
+    multiplayer: false,
+    accent: '#dfb3ea',
+    secondaryAccent: '#8d5b8d',
+    symbol: '⌕',
+  }),
+  hostedGame({
+    slug: 'free-asteroids',
+    title: 'Free Asteroids',
+    genre: 'Arcade',
+    description: 'Pilot through a field of asteroids in a classic arcade-style space game.',
+    tags: ['Arcade', 'Space'],
+    playUrl: 'https://freeasteroids.org/',
+    provider: 'Free Asteroids',
+    licenseUrl: null,
+    featured: false,
+    multiplayer: false,
+    accent: '#8bb8ff',
+    secondaryAccent: '#314c87',
+    symbol: '✦',
+  }),
 ]
 
 export const categories = ['All', ...Array.from(new Set(games.map((game) => game.genre))).sort(), 'Multiplayer']
@@ -83,7 +222,8 @@ export function getSafeReturnHref(value: string) {
 }
 
 export function sourceTypeLabel(sourceType: GameSourceType) {
-  if (sourceType === 'approved-embed') return 'Approved embed'
+  if (sourceType === 'approved-embed') return 'Provider embed'
+  if (sourceType === 'external-link') return 'External provider'
   if (sourceType === 'self-hosted') return 'Self-hosted'
-  return 'Sample placeholder'
+  return 'Placeholder game'
 }

@@ -4,16 +4,27 @@ import { useEffect, useRef, useState } from 'react'
 import { Expand, ExternalLink, Flag, RotateCcw, X } from 'lucide-react'
 import { sourceTypeLabel, type Game } from '@/lib/games'
 
-const approvedEmbedOrigins = new Set<string>()
+const allowedGameOrigins = new Set([
+  'https://client.eaglercraft.win',
+  'https://territorial.io',
+  'https://openfront.io',
+  'https://orteil.dashnet.org',
+  'https://littlealchemy.com',
+  'https://slither.io',
+  'https://www.crazygames.com',
+  'https://hexgl.bkcore.com',
+  'https://play.famobi.com',
+  'https://freeasteroids.org',
+])
 
 function getSafePlayUrl(game: Game) {
   if (game.sourceType === 'placeholder' || game.sourceType === 'self-hosted') {
     return game.playUrl.startsWith('/') && !game.playUrl.startsWith('//') ? game.playUrl : null
   }
-  if (game.sourceType !== 'approved-embed') return null
+  if (game.sourceType !== 'approved-embed' && game.sourceType !== 'external-link') return null
   try {
     const url = new URL(game.playUrl)
-    return url.protocol === 'https:' && approvedEmbedOrigins.has(url.origin) ? url.href : null
+    return url.protocol === 'https:' && allowedGameOrigins.has(url.origin) ? url.href : null
   } catch {
     return null
   }
@@ -98,10 +109,14 @@ export function PlayerModal({ game, onClose, onReport }: { game: Game; onClose: 
       setLoadState('error')
       return
     }
+    if (game.launchMode === 'new-tab') {
+      setLoadState('loaded')
+      return
+    }
     setLoadState('loading')
     const timeout = window.setTimeout(() => setLoadState((current) => current === 'loading' ? 'error' : current), 18000)
     return () => window.clearTimeout(timeout)
-  }, [playUrl, retryCount])
+  }, [playUrl, retryCount, game.launchMode])
 
   const toggleFullscreen = async () => {
     const player = playerRef.current
@@ -124,11 +139,12 @@ export function PlayerModal({ game, onClose, onReport }: { game: Game; onClose: 
         </header>
         {fullscreenError && <p role="status" className="border-b border-red-300/15 bg-red-950/50 px-4 py-2 text-xs text-red-100">{fullscreenError}</p>}
         <div className="arcadia-player-stage relative min-h-[min(70vh,540px)] flex-1 bg-[#090a10]">
-          {playUrl && loadState !== 'error' && <iframe key={`${game.slug}-${retryCount}`} title={`${game.title} sample preview`} src={playUrl} className="absolute inset-0 size-full border-0" allow="autoplay; fullscreen; gamepad; picture-in-picture" allowFullScreen referrerPolicy="strict-origin-when-cross-origin" sandbox={game.sourceType === 'approved-embed' ? 'allow-scripts allow-same-origin' : 'allow-scripts'} onLoad={() => setLoadState('loaded')} onError={() => setLoadState('error')} />}
-          {loadState === 'loading' && <div role="status" className="absolute inset-0 z-10 grid place-items-center bg-[#0a0b13] px-5 text-center text-sm text-white/60"><span><span aria-hidden="true" className="mb-3 inline-block size-5 animate-spin rounded-full border-2 border-white/20 border-t-violet-300 align-middle"/> <span className="ml-2">Loading sample preview…</span></span></div>}
-          {loadState === 'error' && <div className="absolute inset-0 z-10 grid place-items-center px-5 text-center"><div className="max-w-sm"><h3 className="text-lg font-semibold">Preview could not load</h3><p className="mt-2 text-sm leading-6 text-white/55">The sample preview may be unavailable or blocked by the browser.</p><div className="mt-5 flex flex-wrap justify-center gap-3"><button onClick={() => setRetryCount((count) => count + 1)} className="inline-flex min-h-10 items-center gap-2 rounded-lg bg-white px-4 text-xs font-semibold text-[#11121a] hover:bg-violet-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-violet-200"><RotateCcw aria-hidden="true" className="size-3.5"/>Try again</button>{playUrl && <a href={playUrl} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-10 items-center gap-2 rounded-lg border border-white/20 px-4 text-xs font-semibold text-white/80 hover:bg-white/[.06] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-violet-200">Open in a new tab <ExternalLink aria-hidden="true" className="size-3.5"/></a>}</div></div></div>}
+          {game.launchMode !== 'new-tab' && playUrl && loadState !== 'error' && <iframe key={`${game.slug}-${retryCount}`} title={`${game.title} player`} src={playUrl} className="absolute inset-0 size-full border-0" allow="autoplay; fullscreen; gamepad; picture-in-picture" allowFullScreen referrerPolicy="strict-origin-when-cross-origin" sandbox={game.sourceType === 'approved-embed' ? 'allow-scripts allow-same-origin allow-pointer-lock' : 'allow-scripts'} onLoad={() => setLoadState('loaded')} onError={() => setLoadState('error')} />}
+          {game.launchMode === 'new-tab' && playUrl && <div className="absolute inset-0 z-10 grid place-items-center bg-[#090a10] px-5 text-center"><div className="max-w-sm"><span className="mx-auto grid size-12 place-items-center rounded-2xl border border-white/10 bg-violet-400/10 text-violet-200"><ExternalLink aria-hidden="true" className="size-5"/></span><h3 className="mt-4 text-lg font-semibold">Play from the provider</h3><p className="mt-2 text-sm leading-6 text-white/55">This source cannot start inside Arcadia’s embedded player. Open the provider page in a new tab; it may show its own security check.</p><a href={playUrl} target="_blank" rel="noopener noreferrer" className="mt-5 inline-flex min-h-10 items-center gap-2 rounded-lg bg-white px-4 text-xs font-semibold text-[#11121a] hover:bg-violet-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-violet-200">Launch {game.title}<ExternalLink aria-hidden="true" className="size-3.5"/></a></div></div>}
+          {loadState === 'loading' && <div role="status" className="absolute inset-0 z-10 grid place-items-center bg-[#0a0b13] px-5 text-center text-sm text-white/60"><span><span aria-hidden="true" className="mb-3 inline-block size-5 animate-spin rounded-full border-2 border-white/20 border-t-violet-300 align-middle"/> <span className="ml-2">Loading {game.title}…</span></span></div>}
+          {loadState === 'error' && <div className="absolute inset-0 z-10 grid place-items-center px-5 text-center"><div className="max-w-sm"><h3 className="text-lg font-semibold">Game could not load</h3><p className="mt-2 text-sm leading-6 text-white/55">The provider may block embedding or the game may be temporarily unavailable.</p><div className="mt-5 flex flex-wrap justify-center gap-3"><button onClick={() => setRetryCount((count) => count + 1)} className="inline-flex min-h-10 items-center gap-2 rounded-lg bg-white px-4 text-xs font-semibold text-[#11121a] hover:bg-violet-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-violet-200"><RotateCcw aria-hidden="true" className="size-3.5"/>Try again</button>{playUrl && <a href={playUrl} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-10 items-center gap-2 rounded-lg border border-white/20 px-4 text-xs font-semibold text-white/80 hover:bg-white/[.06] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-violet-200">Open in a new tab <ExternalLink aria-hidden="true" className="size-3.5"/></a>}</div></div></div>}
         </div>
-        <div className="flex min-h-10 items-center justify-between gap-3 border-t border-white/10 px-3 text-[10px] text-white/40 sm:px-4"><span className="truncate">Sample catalog entry — provider: {game.provider}</span><span className="shrink-0">Esc to close</span></div>
+        <div className="flex min-h-10 items-center justify-between gap-3 border-t border-white/10 px-3 text-[10px] text-white/40 sm:px-4"><span className="truncate">Game source: {game.provider}</span><div className="flex shrink-0 items-center gap-3"><a href={playUrl ?? undefined} target="_blank" rel="noopener noreferrer" aria-disabled={!playUrl} className="inline-flex min-h-8 items-center gap-1.5 rounded-md text-violet-200 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet-200">Open game in new tab <ExternalLink aria-hidden="true" className="size-3"/></a><span>Esc to close</span></div></div>
       </div>
     </div>
   </div>
