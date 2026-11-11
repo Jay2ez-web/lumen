@@ -93,3 +93,16 @@ button, a, select { -webkit-tap-highlight-color: transparent; }
 .art-horizon { position: absolute; z-index: -1; left: 0; right: 0; bottom: 0; height: 43%; background: linear-gradient(0deg,rgba(8,10,18,.34),transparent); }
 .hero-noise { pointer-events: none; opacity: .12; background-image: radial-gradient(rgba(255,255,255,.38) .55px,transparent .55px); background-size: 5px 5px; mix-blend-mode: soft-light; }
 ::selection { background: #8061d9; color: white; }
+
+.arcadia-player:fullscreen {
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  border: 0;
+  border-radius: 0;
+}
+
+.arcadia-player:fullscreen .arcadia-player-stage {
+  min-height: 0;
+  flex: 1;
+}

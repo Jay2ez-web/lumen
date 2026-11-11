@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { ArrowDownWideNarrow, ArrowLeft, ArrowRight, Bookmark, Check, ChevronDown, Compass, Expand, Gamepad2, Heart, Menu, Play, Search, Shuffle, Sparkles, X, Zap } from 'lucide-react'
 import { categories, gameBySlug, games, type Game } from '@/lib/games'
 
@@ -184,10 +184,46 @@ function GameEmbed({ game }: { game: Game }) {
 }
 
 function PlayerModal({ game, onClose }: { game: Game; onClose: () => void }) {
+  const playerRef = useRef<HTMLDivElement>(null)
+  const fullscreenStateRef = useRef(false)
+  const ignoreEscapeUntilRef = useRef(0)
   const [fullscreen, setFullscreen] = useState(false)
-  useEffect(() => { const key = (event: KeyboardEvent) => { if (event.key === 'Escape') onClose() }; window.addEventListener('keydown', key); document.body.style.overflow = 'hidden'; return () => { window.removeEventListener('keydown', key); document.body.style.overflow = '' } }, [onClose])
-  const goFullscreen = async () => { if (!document.fullscreenElement) await document.querySelector('.arcadia-player')?.requestFullscreen(); else await document.exitFullscreen(); setFullscreen(Boolean(document.fullscreenElement)) }
-  return <div className="fixed inset-0 z-[60] grid place-items-center bg-black/85 p-3 backdrop-blur-sm sm:p-8" role="dialog" aria-modal="true" aria-label={`${game.title} game player`}><div className={`arcadia-player w-full overflow-hidden rounded-2xl border border-white/15 bg-[#10121b] shadow-2xl ${fullscreen ? 'h-full' : 'max-w-5xl'}`}><div className="flex h-14 items-center justify-between border-b border-white/10 px-4"><div className="flex items-center gap-2 text-sm font-medium"><span className="size-2 rounded-full bg-violet-300"/>{game.title}<span className="ml-2 hidden text-[10px] text-white/35 sm:inline">BROWSER PLAYER</span></div><div className="flex items-center gap-2"><button onClick={goFullscreen} aria-label="Toggle fullscreen" className="grid size-9 place-items-center rounded-lg text-white/60 hover:bg-white/10 hover:text-white"><Expand className="size-4"/></button><button onClick={onClose} aria-label="Close player" className="grid size-9 place-items-center rounded-lg text-white/60 hover:bg-white/10 hover:text-white"><X className="size-4"/></button></div></div><div className="relative grid min-h-[460px] place-items-center bg-[radial-gradient(ellipse_at_50%_45%,#221b42_0%,#11121d_45%,#090a10_100%)] sm:min-h-[540px]"><div className="pointer-events-none absolute inset-0 opacity-20" style={{ backgroundImage: 'linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px)', backgroundSize: '48px 48px' }}/><GameEmbed game={game}/></div></div></div>
+  const [fullscreenError, setFullscreenError] = useState<string | null>(null)
+  useEffect(() => {
+    const syncFullscreen = () => {
+      const fullscreenElement = document.fullscreenElement
+      const isFullscreen = Boolean(fullscreenElement && playerRef.current?.contains(fullscreenElement))
+      if (fullscreenStateRef.current && !isFullscreen) ignoreEscapeUntilRef.current = Date.now() + 250
+      fullscreenStateRef.current = isFullscreen
+      setFullscreen(isFullscreen)
+    }
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape' && !fullscreenStateRef.current && Date.now() >= ignoreEscapeUntilRef.current) onClose()
+    }
+    document.addEventListener('fullscreenchange', syncFullscreen)
+    window.addEventListener('keydown', handleKeyDown)
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.removeEventListener('fullscreenchange', syncFullscreen)
+      window.removeEventListener('keydown', handleKeyDown)
+      if (document.fullscreenElement && playerRef.current?.contains(document.fullscreenElement)) {
+        void document.exitFullscreen().catch(() => undefined)
+      }
+      document.body.style.overflow = ''
+    }
+  }, [onClose])
+  const goFullscreen = async () => {
+    const player = playerRef.current
+    if (!player) return
+    setFullscreenError(null)
+    try {
+      if (document.fullscreenElement && player.contains(document.fullscreenElement)) await document.exitFullscreen()
+      else await player.requestFullscreen()
+    } catch {
+      setFullscreenError('Fullscreen was blocked by the browser. Try the game’s own fullscreen control.')
+    }
+  }
+  return <div className="fixed inset-0 z-[60] grid place-items-center bg-black/85 p-3 backdrop-blur-sm sm:p-8" role="dialog" aria-modal="true" aria-label={`${game.title} game player`}><div ref={playerRef} className="arcadia-player flex w-full max-w-5xl flex-col overflow-hidden rounded-2xl border border-white/15 bg-[#10121b] shadow-2xl"><div className="flex h-14 items-center justify-between border-b border-white/10 px-4"><div className="flex items-center gap-2 text-sm font-medium"><span className="size-2 rounded-full bg-violet-300"/>{game.title}<span className="ml-2 hidden text-[10px] text-white/35 sm:inline">BROWSER PLAYER</span></div><div className="flex items-center gap-2"><button onClick={goFullscreen} aria-label={fullscreen ? 'Exit fullscreen' : 'Enter fullscreen'} className="grid size-9 place-items-center rounded-lg text-white/60 hover:bg-white/10 hover:text-white"><Expand className="size-4"/></button><button onClick={onClose} aria-label="Close player" className="grid size-9 place-items-center rounded-lg text-white/60 hover:bg-white/10 hover:text-white"><X className="size-4"/></button></div></div><div className="arcadia-player-stage relative grid min-h-[460px] flex-1 place-items-center bg-[radial-gradient(ellipse_at_50%_45%,#221b42_0%,#11121d_45%,#090a10_100%)] sm:min-h-[540px]"><div className="pointer-events-none absolute inset-0 opacity-20" style={{ backgroundImage: 'linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px)', backgroundSize: '48px 48px' }}/>{fullscreenError && <div role="status" className="absolute left-1/2 top-3 z-20 -translate-x-1/2 rounded-lg bg-red-950/90 px-3 py-2 text-xs text-red-100">{fullscreenError}</div>}<GameEmbed game={game}/></div></div></div>
 }
 
 function Footer() { return <footer className="border-t border-white/[.07]"><div className="mx-auto flex max-w-[1260px] flex-col gap-4 px-5 py-7 sm:flex-row sm:items-center sm:justify-between sm:px-8"><Link href="/" className="flex items-center gap-2 text-sm font-semibold"><span className="grid size-7 place-items-center rounded-lg bg-gradient-to-br from-violet-500 to-indigo-500"><Gamepad2 className="size-4"/></span>arcadia<span className="text-violet-400">.</span></Link><p className="text-[11px] text-white/35">Publisher-hosted games, linked and embedded with care.</p><div className="flex gap-5 text-[11px] text-white/40"><Link href="/explore" className="hover:text-white">Explore</Link><Link href="/library" className="hover:text-white">Library</Link><span>© 2025 Arcadia</span></div></div></footer> }
