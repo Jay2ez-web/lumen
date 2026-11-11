@@ -21,27 +21,30 @@ export type Game = {
   symbol: string
 }
 
-type HostedGame = Omit<Game, 'thumbnailUrl' | 'bannerUrl' | 'sourceType'>
+type HostedGame = Omit<Game, 'thumbnailUrl' | 'bannerUrl' | 'sourceType'> & { thumbnailExtension?: 'png' | 'jpg' }
 
 function hostedGame(game: HostedGame, sourceType: GameSourceType = 'approved-embed'): Game {
+  const { thumbnailExtension = 'png', ...details } = game
+  const thumbnailUrl = `/game-thumbnails/${game.slug}.${thumbnailExtension}`
+
   return {
-    ...game,
-    thumbnailUrl: `/game-thumbnails/${game.slug}.png`,
-    bannerUrl: `/game-thumbnails/${game.slug}.png`,
+    ...details,
+    thumbnailUrl,
+    bannerUrl: thumbnailUrl,
     sourceType,
-    launchMode: game.launchMode ?? (sourceType === 'external-link' ? 'new-tab' : 'iframe'),
+    launchMode: details.launchMode ?? (sourceType === 'external-link' ? 'new-tab' : 'iframe'),
   }
 }
 
 export const games: Game[] = [
   hostedGame({
     slug: 'eaglercraft-112',
-    title: 'Eaglercraft 1.12',
+    title: 'Eaglercraft Ranked',
     genre: 'Sandbox',
-    description: 'A browser-hosted block-building sandbox client loaded from its existing game host.',
+    description: 'Play the browser-based Eaglercraft client from its ranked game site.',
     tags: ['Sandbox', 'Featured', 'Multiplayer'],
-    playUrl: 'https://client.eaglercraft.win/eagler-files/wasm/1.12/Main/index.html',
-    provider: 'Eaglercraft host',
+    playUrl: 'https://play.eaglercraftranked.com/',
+    provider: 'Eaglercraft Ranked',
     licenseUrl: null,
     featured: true,
     multiplayer: true,
@@ -49,7 +52,7 @@ export const games: Game[] = [
     accent: '#9fe0a0',
     secondaryAccent: '#43704a',
     symbol: '▦',
-  }, 'external-link'),
+  }),
   hostedGame({
     slug: 'territorial-io',
     title: 'Territorial.io',
@@ -63,36 +66,6 @@ export const games: Game[] = [
     multiplayer: true,
     accent: '#73d6ff',
     secondaryAccent: '#267cb4',
-    symbol: '◉',
-  }),
-  hostedGame({
-    slug: 'openfront',
-    title: 'OpenFront.io',
-    genre: 'Strategy',
-    description: 'A real-time strategy game about diplomacy, expansion, and competing fronts.',
-    tags: ['Strategy', 'Multiplayer'],
-    playUrl: 'https://openfront.io/',
-    provider: 'OpenFront',
-    licenseUrl: null,
-    featured: true,
-    multiplayer: true,
-    accent: '#78e7d0',
-    secondaryAccent: '#197b83',
-    symbol: '✦',
-  }, 'external-link'),
-  hostedGame({
-    slug: 'cookie-clicker',
-    title: 'Cookie Clicker',
-    genre: 'Idle',
-    description: 'Build a cookie empire in this classic incremental game.',
-    tags: ['Idle', 'Casual'],
-    playUrl: 'https://orteil.dashnet.org/cookieclicker/',
-    provider: 'Orteil',
-    licenseUrl: null,
-    featured: false,
-    multiplayer: false,
-    accent: '#f2c68a',
-    secondaryAccent: '#a45b3c',
     symbol: '◉',
   }),
   hostedGame({
@@ -111,21 +84,6 @@ export const games: Game[] = [
     symbol: '◇',
   }),
   hostedGame({
-    slug: 'slither-io',
-    title: 'Slither.io',
-    genre: 'Arcade',
-    description: 'Grow your snake and outmaneuver other players in a fast browser arena.',
-    tags: ['Arcade', 'Multiplayer'],
-    playUrl: 'https://slither.io/',
-    provider: 'Slither.io',
-    licenseUrl: null,
-    featured: true,
-    multiplayer: true,
-    accent: '#8ee49e',
-    secondaryAccent: '#47a878',
-    symbol: '↝',
-  }),
-  hostedGame({
     slug: '10-bullets',
     title: '10 Bullets',
     genre: 'Arcade',
@@ -140,6 +98,7 @@ export const games: Game[] = [
     accent: '#bf9dff',
     secondaryAccent: '#5542b3',
     symbol: '✺',
+    thumbnailExtension: 'jpg',
   }),
   hostedGame({
     slug: 'hexgl',
@@ -170,6 +129,7 @@ export const games: Game[] = [
     accent: '#dfb3ea',
     secondaryAccent: '#8d5b8d',
     symbol: '⌕',
+    thumbnailExtension: 'jpg',
   }),
   hostedGame({
     slug: 'free-asteroids',
@@ -213,8 +173,8 @@ export function getSingleParam(value: string | string[] | undefined) {
 export function getSafeReturnHref(value: string) {
   if (!value.startsWith('/') || value.startsWith('//')) return undefined
   try {
-    const parsed = new URL(value, 'https://arcadia.local')
-    if (parsed.origin !== 'https://arcadia.local' || parsed.pathname !== '/explore') return undefined
+    const parsed = new URL(value, 'https://lumen.local')
+    if (parsed.origin !== 'https://lumen.local' || parsed.pathname !== '/explore') return undefined
     return `${parsed.pathname}${parsed.search}`
   } catch {
     return undefined

@@ -3,9 +3,10 @@ import type { Metadata, Viewport } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: { default: 'Arcadia — Play a little more', template: '%s | Arcadia' },
-  description: 'Play browser games from their listed providers, save favorites, and explore Arcadia’s curated catalog.',
-  generator: 'Arcadia',
+  title: { default: 'LUMEN — Games, Watch, Apps & Chat', template: '%s | LUMEN' },
+  description: 'LUMEN is one place for browser games, licensed short films, useful mini apps, and community chat.',
+  generator: 'LUMEN',
+  applicationName: 'LUMEN',
   icons: {
     icon: [
       { url: '/icon-light-32x32.png', media: '(prefers-color-scheme: light)' },
@@ -16,10 +17,7 @@ export const metadata: Metadata = {
   },
 }
 
-export const viewport: Viewport = {
-  colorScheme: 'dark',
-  themeColor: '#080a12',
-}
+export const viewport: Viewport = { colorScheme: 'dark', themeColor: '#080a12' }
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return <html lang="en"><body className="antialiased">{children}{process.env.NODE_ENV === 'production' && <Analytics />}</body></html>

@@ -1,20 +1,13 @@
 import type { Metadata } from 'next'
-import { ArcadiaApp } from '@/components/arcadia/app-shell'
-import { gameBySlug, getSafeReturnHref, getSingleParam, type RouteSearchParams } from '@/lib/games'
+import { LumenAppShell } from '@/components/lumen/app-shell'
+import { gameBySlug } from '@/lib/games'
 
-type PageProps = { params: Promise<{ slug: string }>; searchParams: RouteSearchParams }
+type PageProps = { params: Promise<{ slug: string }> }
 
-export async function generateMetadata({ params }: Pick<PageProps, 'params'>): Promise<Metadata> {
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params
   const game = gameBySlug(slug)
-  return { title: game ? `${game.title} — Arcadia` : 'Game not found — Arcadia', description: game?.description ?? 'Explore browser games in Arcadia.' }
+  return { title: game?.title ?? 'Game not found', description: game?.description ?? 'Explore games in the LUMEN catalog.' }
 }
 
-export default async function GamePage({ params, searchParams }: PageProps) {
-  const [{ slug }, query] = await Promise.all([params, searchParams])
-  const returnHref = getSafeReturnHref(getSingleParam(query.returnTo))
-  const returnParams = returnHref ? new URL(returnHref, 'https://arcadia.local').searchParams : null
-  const initialQuery = getSingleParam(query.q) || returnParams?.get('q') || ''
-  const initialCategory = getSingleParam(query.category) || returnParams?.get('category') || 'All'
-  return <ArcadiaApp view="game" slug={slug} initialQuery={initialQuery} initialCategory={initialCategory} returnHref={returnHref} />
-}
+export default function GamePage() { return <LumenAppShell /> }

@@ -1,0 +1,21 @@
+'use client'
+
+import { AlertTriangle, ShieldCheck, SlidersHorizontal } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+
+export type LumenSettings = { theme: 'dark' | 'dim'; reducedMotion: boolean; autoplay: boolean; sound: boolean; chatMuted: boolean }
+
+const options: { key: keyof Omit<LumenSettings, 'theme'>; title: string; description: string }[] = [
+  { key: 'reducedMotion', title: 'Reduce motion', description: 'Limit animated transitions and movement.' },
+  { key: 'autoplay', title: 'Autoplay videos', description: 'Allow supported video content to start automatically.' },
+  { key: 'sound', title: 'Sound effects', description: 'Enable interface sounds when available.' },
+  { key: 'chatMuted', title: 'Mute chat by default', description: 'Keep chat previews quiet when you enter the site.' },
+]
+
+export function SettingsPage({ settings, onChange, onClear }: { settings: LumenSettings; onChange: (next: LumenSettings) => void; onClear: () => void }) {
+  return <main className="max-w-3xl"><div className="mb-7"><p className="text-[9px] font-semibold uppercase tracking-[.2em] text-violet-200/75">Your preferences</p><h1 className="mt-2 text-3xl font-semibold tracking-tight">Settings</h1><p className="mt-2 text-xs text-white/50">Control the LUMEN experience on this device.</p></div><div className="space-y-4">
+    <section className="rounded-2xl border border-white/[.08] bg-[#10121b] p-4 sm:p-5"><div className="flex items-center gap-3"><span className="grid size-9 place-items-center rounded-xl bg-violet-400/10 text-violet-200"><SlidersHorizontal className="size-4"/></span><div><h2 className="text-sm font-semibold">Experience</h2><p className="text-[10px] text-white/40">Appearance and playback</p></div></div><label className="mt-5 block text-xs font-medium text-white/70" htmlFor="theme-choice">Theme preference</label><select id="theme-choice" value={settings.theme} onChange={(event) => onChange({ ...settings, theme: event.target.value as 'dark' | 'dim' })} className="mt-2 min-h-10 w-full max-w-xs rounded-lg border border-white/10 bg-[#171925] px-3 text-xs"><option value="dark">Dark — near black</option><option value="dim">Dim — softer charcoal</option></select><div className="mt-4 divide-y divide-white/[.06]">{options.map((option) => <label key={option.key} className="flex min-h-16 items-center justify-between gap-4 py-3"><span><span className="block text-xs font-medium text-white/75">{option.title}</span><span className="mt-1 block text-[10px] text-white/40">{option.description}</span></span><input type="checkbox" checked={settings[option.key]} onChange={(event) => onChange({ ...settings, [option.key]: event.target.checked })} className="size-4 shrink-0 accent-violet-400" aria-label={option.title}/></label>)}</div></section>
+    <section className="rounded-2xl border border-white/[.08] bg-[#10121b] p-4 sm:p-5"><div className="flex items-center gap-3"><span className="grid size-9 place-items-center rounded-xl bg-emerald-300/10 text-emerald-200"><ShieldCheck className="size-4"/></span><div><h2 className="text-sm font-semibold">About & privacy</h2><p className="text-[10px] text-white/40">Prototype data and content sources</p></div></div><div className="mt-4 space-y-3 text-xs leading-5 text-white/50"><p>LUMEN is an entertainment hub prototype. Saved games, app data, watch progress, and local demo chat messages stay in your browser and are not synced to an account.</p><p>Watch samples are Creative Commons works from the Blender Foundation. Game links are provided by their listed hosts; LUMEN does not host game files.</p><p>Before adding Supabase, connect authentication, scoped database tables, and Realtime policies. The chat screen is explicitly a local demo today.</p></div></section>
+    <section className="rounded-2xl border border-red-200/10 bg-red-300/[.03] p-4 sm:p-5"><div className="flex items-start gap-3"><AlertTriangle className="mt-0.5 size-4 text-red-200/70"/><div className="flex-1"><h2 className="text-sm font-semibold">Clear local data</h2><p className="mt-1 text-xs leading-5 text-white/45">Remove LUMEN favorites, histories, notes, tasks, chat, and settings from this browser.</p></div></div><Button variant="destructive" size="sm" onClick={onClear} className="mt-4 min-h-10 px-3 text-xs">Clear all local data</Button></section>
+  </div></main>
+}
