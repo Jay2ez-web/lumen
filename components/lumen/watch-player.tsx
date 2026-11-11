@@ -31,12 +31,12 @@ export function WatchPlayer({ item, autoplay, progress, onProgress }: { item: Wa
 
   if (embedUrl && !failed) {
     return <div className="relative aspect-video overflow-hidden rounded-2xl border border-white/10 bg-black">
-      {!loaded && <div role="status" className="absolute inset-0 z-10 grid place-items-center bg-[#0b0c13] text-sm text-white/60"><LoaderCircle className="mr-2 size-4 animate-spin text-violet-200" />Loading {item.title}…</div>}
+      {!loaded && <div role="status" className="absolute inset-0 z-10 grid place-items-center bg-[#0b0c13] text-sm text-white/60"><LoaderCircle className="mr-2 size-4 animate-spin text-emerald-200" />Loading {item.title}…</div>}
       <iframe title={item.title} src={embedUrl} className="size-full border-0" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen referrerPolicy="strict-origin-when-cross-origin" onLoad={() => setLoaded(true)} onError={() => setFailed(true)} />
     </div>
   }
 
   return <div className="grid aspect-video place-items-center rounded-2xl border border-white/10 bg-[radial-gradient(ellipse_at_50%_20%,rgba(124,92,255,.22),transparent_50%),#0b0c13] px-6 text-center">
-    <div className="max-w-sm"><span className="mx-auto grid size-12 place-items-center rounded-2xl border border-white/10 bg-white/[.04] text-violet-200"><Film className="size-5" /></span><h2 className="mt-4 text-lg font-semibold">This video is unavailable</h2><p className="mt-2 text-sm leading-6 text-white/50">The source is missing, blocked, or is not an approved embed. LUMEN does not copy or proxy third-party streams.</p>{item.embedUrl && <a href={item.embedUrl} target="_blank" rel="noopener noreferrer" className="mt-4 inline-flex items-center gap-2 text-xs text-violet-200 hover:text-white">Open listed source <ExternalLink className="size-3.5" /></a>}</div>
+    <div className="max-w-sm"><span className="mx-auto grid size-12 place-items-center rounded-2xl border border-white/10 bg-white/[.04] text-emerald-200"><Film className="size-5" /></span><h2 className="mt-4 text-lg font-semibold">This video is unavailable</h2><p className="mt-2 text-sm leading-6 text-white/50">The source is missing, blocked, or is not an approved embed. LUMEN does not copy or proxy third-party streams.</p>{item.embedUrl && <a href={item.embedUrl} target="_blank" rel="noopener noreferrer" className="mt-4 inline-flex items-center gap-2 text-xs text-emerald-200 hover:text-white">Open listed source <ExternalLink className="size-3.5" /></a>}</div>
   </div>
 }
