@@ -5,12 +5,9 @@ import { Expand, ExternalLink, Flag, RotateCcw, X } from 'lucide-react'
 import { sourceTypeLabel, type Game } from '@/lib/games'
 
 const allowedGameOrigins = new Set([
-  'https://client.eaglercraft.win',
+  'https://play.eaglercraftranked.com',
   'https://territorial.io',
-  'https://openfront.io',
-  'https://orteil.dashnet.org',
   'https://littlealchemy.com',
-  'https://slither.io',
   'https://www.crazygames.com',
   'https://hexgl.bkcore.com',
   'https://play.famobi.com',

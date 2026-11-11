@@ -37,7 +37,7 @@ export default async function GamePreviewPage({ params }: { params: Promise<{ sl
       >
         <Image
           src={game.bannerUrl}
-          alt={`Original artwork for ${game.title}`}
+          alt={`Game artwork for ${game.title}`}
           fill
           sizes="(max-width: 960px) 100vw, 960px"
           unoptimized
@@ -49,7 +49,7 @@ export default async function GamePreviewPage({ params }: { params: Promise<{ sl
             Sample build · not final gameplay
           </span>
           <span style={{ border: '1px solid rgba(255,255,255,.15)', borderRadius: 999, background: 'rgba(9,10,17,.5)', padding: '8px 12px', color: 'rgba(255,255,255,.72)', fontSize: 10 }}>
-            Original Arcadia artwork
+            Provider game artwork
           </span>
         </div>
         <div style={{ position: 'absolute', right: 24, bottom: 24, left: 24, zIndex: 1, maxWidth: 700 }}>
@@ -57,7 +57,7 @@ export default async function GamePreviewPage({ params }: { params: Promise<{ sl
             {game.title}
           </h1>
           <p style={{ maxWidth: 620, margin: '14px 0 0', color: 'rgba(255,255,255,.76)', fontSize: 14, lineHeight: 1.65 }}>
-            This page previews Arcadia’s original artwork. The actual game opens from its listed provider on the game details page.
+            This page previews the game artwork. Play the provider-hosted game from its details page inside Arcadia.
           </p>
           <p style={{ margin: '16px 0 0', color: 'rgba(255,255,255,.56)', fontSize: 11 }}>
             Provider: {game.provider} <span aria-hidden="true" style={{ padding: '0 6px' }}>·</span> Source type: {game.sourceType}
