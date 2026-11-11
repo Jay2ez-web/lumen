@@ -88,7 +88,7 @@ button, a, select { -webkit-tap-highlight-color: transparent; }
 .scrollbar-hide::-webkit-scrollbar { display: none; }
 ::selection { background: #8061d9; color: white; }
 
-.arcadia-player:fullscreen {
+.lumen-player:fullscreen {
   width: 100%;
   height: 100%;
   max-width: none;
@@ -96,7 +96,16 @@ button, a, select { -webkit-tap-highlight-color: transparent; }
   border-radius: 0;
 }
 
-.arcadia-player:fullscreen .arcadia-player-stage {
+.lumen-player:fullscreen .lumen-player-stage {
   min-height: 0;
   flex: 1;
+}
+
+[data-reduced-motion='true'] *,
+[data-reduced-motion='true'] *::before,
+[data-reduced-motion='true'] *::after {
+  scroll-behavior: auto !important;
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
 }

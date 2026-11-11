@@ -173,8 +173,8 @@ export function getSingleParam(value: string | string[] | undefined) {
 export function getSafeReturnHref(value: string) {
   if (!value.startsWith('/') || value.startsWith('//')) return undefined
   try {
-    const parsed = new URL(value, 'https://arcadia.local')
-    if (parsed.origin !== 'https://arcadia.local' || parsed.pathname !== '/explore') return undefined
+    const parsed = new URL(value, 'https://lumen.local')
+    if (parsed.origin !== 'https://lumen.local' || parsed.pathname !== '/explore') return undefined
     return `${parsed.pathname}${parsed.search}`
   } catch {
     return undefined

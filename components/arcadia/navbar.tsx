@@ -40,14 +40,14 @@ export function Navbar({ pathname, query, savedCount, homeHref, exploreHref, lib
 
   return <header className="sticky top-0 z-40 border-b border-white/[.07] bg-[#080a12]/90 backdrop-blur-xl">
     <nav aria-label="Main navigation" className="mx-auto flex h-[68px] max-w-[1440px] items-center gap-5 px-4 sm:h-[76px] sm:gap-8 sm:px-8">
-      <Link href={homeHref} onClick={() => setMobileOpen(false)} className="flex shrink-0 items-center gap-2.5" aria-label="Arcadia home">
+      <Link href={homeHref} onClick={() => setMobileOpen(false)} className="flex shrink-0 items-center gap-2.5" aria-label="LUMEN home">
         <span className="grid size-9 place-items-center rounded-xl bg-gradient-to-br from-violet-500 to-indigo-500 shadow-lg shadow-violet-950/50"><Gamepad2 aria-hidden="true" className="size-5" /></span>
-        <span className="text-[19px] font-bold tracking-tight">arcadia<span className="text-violet-400">.</span></span>
+        <span className="text-[19px] font-bold tracking-tight">lumen<span className="text-violet-400">.</span></span>
       </Link>
       <div className="hidden items-center gap-7 md:flex">{links.map((link) => <Link key={link.label} href={link.href} aria-current={link.active ? 'page' : undefined} className={`text-[13px] transition-colors hover:text-white ${link.active ? 'font-medium text-white' : 'text-white/55'}`}>{link.label}</Link>)}</div>
       <div className="ml-auto hidden items-center gap-3 lg:flex">{searchForm()}<Link href={libraryHref} className="rounded-xl border border-white/[.12] px-4 py-2.5 text-xs font-medium transition-colors hover:bg-white/[.06]">My library</Link></div>
-      <button className="ml-auto grid size-10 place-items-center rounded-lg border border-white/10 md:hidden" onClick={() => setMobileOpen((open) => !open)} aria-label={mobileOpen ? 'Close navigation menu' : 'Open navigation menu'} aria-expanded={mobileOpen} aria-controls="arcadia-mobile-navigation">{mobileOpen ? <X aria-hidden="true" className="size-5" /> : <Menu aria-hidden="true" className="size-5" />}</button>
+      <button className="ml-auto grid size-10 place-items-center rounded-lg border border-white/10 md:hidden" onClick={() => setMobileOpen((open) => !open)} aria-label={mobileOpen ? 'Close navigation menu' : 'Open navigation menu'} aria-expanded={mobileOpen} aria-controls="lumen-mobile-navigation">{mobileOpen ? <X aria-hidden="true" className="size-5" /> : <Menu aria-hidden="true" className="size-5" />}</button>
     </nav>
-    {mobileOpen && <div id="arcadia-mobile-navigation" className="border-t border-white/10 px-4 py-4 md:hidden">{searchForm(true)}<div className="mt-3 grid grid-cols-2 gap-2">{links.map((link) => <Link key={link.label} onClick={() => setMobileOpen(false)} href={link.href} aria-current={link.active ? 'page' : undefined} className="rounded-lg px-3 py-3 text-sm text-white/70 transition hover:bg-white/[.06] hover:text-white">{link.label}</Link>)}</div></div>}
+    {mobileOpen && <div id="lumen-mobile-navigation" className="border-t border-white/10 px-4 py-4 md:hidden">{searchForm(true)}<div className="mt-3 grid grid-cols-2 gap-2">{links.map((link) => <Link key={link.label} onClick={() => setMobileOpen(false)} href={link.href} aria-current={link.active ? 'page' : undefined} className="rounded-lg px-3 py-3 text-sm text-white/70 transition hover:bg-white/[.06] hover:text-white">{link.label}</Link>)}</div></div>}
   </header>
 }

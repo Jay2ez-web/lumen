@@ -29,7 +29,7 @@ function readStoredGames(key: string) {
   }
 }
 
-export function ArcadiaApp({ view, slug, initialQuery = '', initialCategory = 'All', returnHref }: RouteProps) {
+export function LUMENApp({ view, slug, initialQuery = '', initialCategory = 'All', returnHref }: RouteProps) {
   const pathname = usePathname()
   const router = useRouter()
   const [query, setQuery] = useState(initialQuery)
@@ -47,8 +47,8 @@ export function ArcadiaApp({ view, slug, initialQuery = '', initialCategory = 'A
   }, [initialQuery, initialCategory])
 
   useEffect(() => {
-    setSaved(readStoredGames('arcadia-saved'))
-    setPlayed(readStoredGames('arcadia-played'))
+    setSaved(readStoredGames('lumen-saved-games'))
+    setPlayed(readStoredGames('lumen-recently-played'))
     setReady(true)
   }, [])
 
@@ -71,19 +71,19 @@ export function ArcadiaApp({ view, slug, initialQuery = '', initialCategory = 'A
     const isSaved = saved.includes(game.slug)
     const next = isSaved ? saved.filter((slug) => slug !== game.slug) : [game.slug, ...saved]
     setSaved(next)
-    try { window.localStorage.setItem('arcadia-saved', JSON.stringify(next)) } catch { /* Storage may be disabled. */ }
+    try { window.localStorage.setItem('lumen-saved-games', JSON.stringify(next)) } catch { /* Storage may be disabled. */ }
     showToast(isSaved ? `${game.title} removed from your library` : `${game.title} saved to your library`)
   }, [saved, showToast])
 
   const startGame = useCallback((game: Game) => {
     const next = [game.slug, ...played.filter((slug) => slug !== game.slug)].slice(0, 12)
     setPlayed(next)
-    try { window.localStorage.setItem('arcadia-played', JSON.stringify(next)) } catch { /* Storage may be disabled. */ }
+    try { window.localStorage.setItem('lumen-recently-played', JSON.stringify(next)) } catch { /* Storage may be disabled. */ }
     setSelectedGame(game)
   }, [played])
 
   const reportBrokenGame = useCallback((game: Game) => {
-    const report = `Arcadia game report\nGame: ${game.title}\nProvider: ${game.provider}\nPlay URL: ${game.playUrl}`
+    const report = `LUMEN game report\nGame: ${game.title}\nProvider: ${game.provider}\nPlay URL: ${game.playUrl}`
     showToast(`Preparing report for ${game.title}`)
     if (!navigator.clipboard?.writeText) {
       showToast(`Report ${game.title} to the site owner with its game title and URL`)
