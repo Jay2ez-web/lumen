@@ -153,7 +153,7 @@ function GameDetail({ game, related, saved, onSave, onPlay }: { game: Game; rela
   </main>
 }
 
-const approvedEmbedHosts = new Set(['client.eaglercraft.win', 'hexgl.bkcore.com', 'www.crazygames.com', 'playgta5.net', 'playgta5.pro', 'csjs.live', 'wasmarcade.com', 'selenite1.freetls.fastly.net', 'territorial.io', 'openfront.io', 'orteil.dashnet.org', 'littlealchemy.com', 'slither.io', 'play.famobi.com', 'freeasteroids.org', 'worldsbiggestpacman.com'])
+const approvedEmbedHosts = new Set(['play.eaglercraftranked.com', 'hexgl.bkcore.com', 'www.crazygames.com', 'playgta5.net', 'playgta5.pro', 'csjs.live', 'wasmarcade.com', 'selenite1.freetls.fastly.net', 'territorial.io', 'openfront.io', 'orteil.dashnet.org', 'littlealchemy.com', 'slither.io', 'play.famobi.com', 'freeasteroids.org', 'worldsbiggestpacman.com'])
 
 function GameEmbed({ game }: { game: Game }) {
   const [loading, setLoading] = useState(Boolean(game.embedUrl))
