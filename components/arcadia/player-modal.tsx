@@ -15,7 +15,6 @@ const allowedGameOrigins = new Set([
   'https://hexgl.bkcore.com',
   'https://play.famobi.com',
   'https://freeasteroids.org',
-  'https://worldsbiggestpacman.com',
 ])
 
 function getSafePlayUrl(game: Game) {

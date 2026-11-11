@@ -1,8 +1,8 @@
 import type { Metadata } from 'next'
 import { ArcadiaApp } from '@/components/arcadia/app-shell'
-import { getSingleParam, type RouteSearchParams } from '@/lib/games'
+import { games, getSingleParam, type RouteSearchParams } from '@/lib/games'
 
-export const metadata: Metadata = { title: 'Explore games — Arcadia', description: 'Browse 12 browser games from their listed providers, with original placeholder artwork.' }
+export const metadata: Metadata = { title: 'Explore games — Arcadia', description: `Browse ${games.length} browser games from their listed providers, with original generated thumbnails.` }
 
 export default async function ExplorePage({ searchParams }: { searchParams: RouteSearchParams }) {
   const params = await searchParams

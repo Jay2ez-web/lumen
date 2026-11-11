@@ -26,8 +26,8 @@ type HostedGame = Omit<Game, 'thumbnailUrl' | 'bannerUrl' | 'sourceType'>
 function hostedGame(game: HostedGame, sourceType: GameSourceType = 'approved-embed'): Game {
   return {
     ...game,
-    thumbnailUrl: `/game-art/${game.slug}.svg?v=2`,
-    bannerUrl: `/game-art/${game.slug}.svg?format=banner&v=2`,
+    thumbnailUrl: `/game-thumbnails/${game.slug}.png`,
+    bannerUrl: `/game-thumbnails/${game.slug}.png`,
     sourceType,
     launchMode: game.launchMode ?? (sourceType === 'external-link' ? 'new-tab' : 'iframe'),
   }
@@ -48,21 +48,6 @@ export const games: Game[] = [
     addedAt: '2026-11-11',
     accent: '#9fe0a0',
     secondaryAccent: '#43704a',
-    symbol: '▦',
-  }, 'external-link'),
-  hostedGame({
-    slug: 'eaglercraft-189',
-    title: 'Eaglercraft 1.8.9',
-    genre: 'Sandbox',
-    description: 'A second browser-hosted Eaglercraft build, played directly from its existing source host.',
-    tags: ['Sandbox', 'Multiplayer'],
-    playUrl: 'https://client.eaglercraft.win/eagler-files/wasm/1.8/AstraClient/index.html',
-    provider: 'Eaglercraft host',
-    licenseUrl: null,
-    featured: false,
-    multiplayer: true,
-    accent: '#8ac8e7',
-    secondaryAccent: '#47779c',
     symbol: '▦',
   }, 'external-link'),
   hostedGame({
@@ -201,21 +186,6 @@ export const games: Game[] = [
     secondaryAccent: '#314c87',
     symbol: '✦',
   }),
-  hostedGame({
-    slug: 'worlds-biggest-pacman',
-    title: 'World’s Biggest Pac-Man',
-    genre: 'Arcade',
-    description: 'Navigate a maze and explore player-made labyrinths in the browser.',
-    tags: ['Arcade', 'Maze'],
-    playUrl: 'https://worldsbiggestpacman.com',
-    provider: 'World’s Biggest Pac-Man',
-    licenseUrl: null,
-    featured: false,
-    multiplayer: false,
-    accent: '#f1dc6f',
-    secondaryAccent: '#51418b',
-    symbol: '◌',
-  }),
 ]
 
 export const categories = ['All', ...Array.from(new Set(games.map((game) => game.genre))).sort(), 'Multiplayer']
@@ -252,7 +222,7 @@ export function getSafeReturnHref(value: string) {
 }
 
 export function sourceTypeLabel(sourceType: GameSourceType) {
-  if (sourceType === 'approved-embed') return 'Approved embed'
+  if (sourceType === 'approved-embed') return 'Provider embed'
   if (sourceType === 'external-link') return 'External provider'
   if (sourceType === 'self-hosted') return 'Self-hosted'
   return 'Placeholder game'
