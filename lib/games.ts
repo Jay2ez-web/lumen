@@ -1,32 +1,71 @@
 export type Game = {
-  slug: string; title: string; genre: string; description: string; rating: string; players: string; tags: string[]; artwork: string; accent: string; symbol: string; added?: boolean
+  slug: string
+  title: string
+  genre: string
+  description: string
+  tags: string[]
+  artwork: string
+  accent: string
+  symbol: string
+  added?: boolean
+  sourceName: string
+  sourceUrl: string
+  embedUrl?: string
 }
 
+// Keep iframe URLs limited to publisher-provided or permissively licensed game builds.
 export const games: Game[] = [
-  { slug: 'neon-drift', title: 'Neon Drift', genre: 'Racing', description: 'Chase the afterglow through a city that never slows down. Master impossible turns and leave your mark on the midnight grid.', rating: '4.9', players: '2.4k', tags: ['Featured', 'Multiplayer'], artwork: 'linear-gradient(125deg,#0d153c 0%,#5224a2 48%,#ff4a85 100%)', accent: '#ec73d5', symbol: '◈' },
-  { slug: 'skybound-arena', title: 'Skybound Arena', genre: 'Action', description: 'Take the high ground in a fast-paced aerial arena above the clouds.', rating: '4.8', players: '1.8k', tags: ['Multiplayer'], artwork: 'linear-gradient(135deg,#14365c,#267cb4 52%,#a9e1f5)', accent: '#73d6ff', symbol: '✦' },
-  { slug: 'pixel-outpost', title: 'Pixel Outpost', genre: 'Adventure', description: 'Build a tiny frontier on the edge of a very big universe.', rating: '4.7', players: '964', tags: ['New'], artwork: 'linear-gradient(135deg,#173d43,#6f9d68 52%,#ebc678)', accent: '#c9f28a', symbol: '▦', added: true },
-  { slug: 'lunar-kart', title: 'Lunar Kart', genre: 'Racing', description: 'Low gravity. High speed. One moon-sized trophy.', rating: '4.6', players: '782', tags: ['Multiplayer'], artwork: 'linear-gradient(135deg,#182547,#4957a8 54%,#ff9dbe)', accent: '#a8b5ff', symbol: '☾' },
-  { slug: 'dungeon-circuit', title: 'Dungeon Circuit', genre: 'Roguelike', description: 'Every run is a new maze. Every turn is a new threat.', rating: '4.8', players: '1.2k', tags: ['Featured'], artwork: 'linear-gradient(135deg,#201326,#823e72 48%,#f0a66c)', accent: '#ffb486', symbol: '⌘' },
-  { slug: 'robo-rally', title: 'Robo Rally', genre: 'Strategy', description: 'Program your little robot. Watch your big plans go sideways.', rating: '4.5', players: '516', tags: ['Multiplayer'], artwork: 'linear-gradient(135deg,#102f37,#197b83 54%,#b1dfb5)', accent: '#78e7d0', symbol: '⬡' },
-  { slug: 'cosmic-blocks', title: 'Cosmic Blocks', genre: 'Puzzle', description: 'A fresh spin on falling blocks, with a whole galaxy to clear.', rating: '4.9', players: '3.1k', tags: ['Popular'], artwork: 'linear-gradient(135deg,#191344,#5542b3 53%,#fc79ad)', accent: '#bf9dff', symbol: '▧' },
-  { slug: 'shadow-sprint', title: 'Shadow Sprint', genre: 'Action', description: 'A stylish dash through a world caught between light and dark.', rating: '4.4', players: '430', tags: ['New'], artwork: 'linear-gradient(135deg,#111522,#36425a 56%,#f2ad58)', accent: '#ffd27d', symbol: '◒', added: true },
-  { slug: 'kingdom-forge', title: 'Kingdom Forge', genre: 'Strategy', description: 'Gather your people, raise your banners, and build a kingdom to last.', rating: '4.7', players: '1.1k', tags: ['Featured'], artwork: 'linear-gradient(135deg,#302035,#a15f4c 56%,#e4c277)', accent: '#f7cf85', symbol: '♜' },
-  { slug: 'astro-tactics', title: 'Astro Tactics', genre: 'Strategy', description: 'A bite-sized tactical expedition among uncharted stars.', rating: '4.6', players: '648', tags: ['New'], artwork: 'linear-gradient(135deg,#101e43,#365e98 55%,#53d3d1)', accent: '#79f2e7', symbol: '✧', added: true },
-  { slug: 'mosslight', title: 'Mosslight', genre: 'Adventure', description: 'Follow a wandering firefly through an enchanted forest.', rating: '4.9', players: '2.0k', tags: ['Editor’s pick'], artwork: 'linear-gradient(135deg,#172f2b,#518b66 53%,#d5ce8e)', accent: '#c7f4a3', symbol: '❋' },
-  { slug: 'tidal-treasure', title: 'Tidal Treasure', genre: 'Puzzle', description: 'Rearrange the tides and discover what the sea left behind.', rating: '4.5', players: '390', tags: ['New'], artwork: 'linear-gradient(135deg,#122b4b,#208ba2 50%,#86dac9)', accent: '#8df3e1', symbol: '≋', added: true },
-  { slug: 'velvet-void', title: 'Velvet Void', genre: 'Arcade', description: 'A one-more-try cosmic arcade trip in electric color.', rating: '4.8', players: '1.6k', tags: ['Popular'], artwork: 'linear-gradient(135deg,#250e35,#aa327b 54%,#ffb15e)', accent: '#ff8ed3', symbol: '✺' },
-  { slug: 'paper-kingdom', title: 'Paper Kingdom', genre: 'Adventure', description: 'Explore a world folded from paper and held together by wonder.', rating: '4.7', players: '832', tags: ['Editor’s pick'], artwork: 'linear-gradient(135deg,#394665,#a5a7aa 52%,#ebbe85)', accent: '#f6d1a2', symbol: '◇' },
-  { slug: 'volt-volley', title: 'Volt Volley', genre: 'Sports', description: 'Serve, spike, and spark your way to the top of the court.', rating: '4.5', players: '1.3k', tags: ['Multiplayer'], artwork: 'linear-gradient(135deg,#14373e,#39a789 53%,#d8da73)', accent: '#d8f489', symbol: '⌁' },
-  { slug: 'tiny-titans', title: 'Tiny Titans', genre: 'Action', description: 'Big boss battles. Pocket-sized heroes. Surprisingly large hats.', rating: '4.6', players: '705', tags: ['Popular'], artwork: 'linear-gradient(135deg,#412248,#b84769 52%,#f7bc6e)', accent: '#ffc580', symbol: '♢' },
-  { slug: 'cloud-hopper', title: 'Cloud Hopper', genre: 'Arcade', description: 'Bounce between clouds and see how far your little bird can go.', rating: '4.4', players: '560', tags: ['New'], artwork: 'linear-gradient(135deg,#315189,#76bfe0 54%,#ede2b1)', accent: '#f4efbd', symbol: '☁', added: true },
-  { slug: 'signal-lost', title: 'Signal Lost', genre: 'Puzzle', description: 'Tune into a distant transmission and piece together its story.', rating: '4.8', players: '1.0k', tags: ['Editor’s pick'], artwork: 'linear-gradient(135deg,#1c2530,#526873 50%,#bd9ca0)', accent: '#e2b6cd', symbol: '⌁' },
-  { slug: 'driftwood-bay', title: 'Driftwood Bay', genre: 'Adventure', description: 'A quiet island, a tiny boat, and nowhere else to be.', rating: '4.7', players: '608', tags: ['Popular'], artwork: 'linear-gradient(135deg,#204b57,#5b9c96 52%,#e2c890)', accent: '#d6f0be', symbol: '⌂' },
-  { slug: 'star-courier', title: 'Star Courier', genre: 'Racing', description: 'Deliver the important stuff at absolutely unreasonable speeds.', rating: '4.6', players: '921', tags: ['Multiplayer'], artwork: 'linear-gradient(135deg,#101c40,#4160a8 54%,#ee818c)', accent: '#ffabb9', symbol: '➤' },
-  { slug: 'garden-golems', title: 'Garden Golems', genre: 'Strategy', description: 'Grow a garden with a little help from your rocky friends.', rating: '4.5', players: '342', tags: ['New'], artwork: 'linear-gradient(135deg,#223b32,#7ba46e 56%,#d8b68f)', accent: '#d4f4a0', symbol: '❀', added: true },
-  { slug: 'midnight-metro', title: 'Midnight Metro', genre: 'Arcade', description: 'Keep the city moving in this neon-lit puzzle of perfect timing.', rating: '4.6', players: '1.2k', tags: ['Popular'], artwork: 'linear-gradient(135deg,#1d1a3a,#4c59a1 52%,#e967a6)', accent: '#f58ccc', symbol: '▤' },
-  { slug: 'fable-farm', title: 'Fable Farm', genre: 'Adventure', description: 'Plant strange seeds and see what kind of stories grow.', rating: '4.8', players: '1.7k', tags: ['Editor’s pick'], artwork: 'linear-gradient(135deg,#3d3549,#a7776d 52%,#e7d28b)', accent: '#f0e8a1', symbol: '✿' },
-  { slug: 'orbit-breaker', title: 'Orbit Breaker', genre: 'Action', description: 'Defend your tiny planet from a very dramatic asteroid belt.', rating: '4.7', players: '884', tags: ['Featured'], artwork: 'linear-gradient(135deg,#171b42,#4342a3 50%,#fa795a)', accent: '#ffac82', symbol: '◎' },
+  {
+    slug: 'hexgl',
+    title: 'HexGL',
+    genre: 'Racing',
+    description: 'Race a high-speed anti-gravity ship through a luminous future city in this open-source WebGL racer.',
+    tags: ['Open source', 'Featured'],
+    artwork: 'linear-gradient(125deg,#0d153c 0%,#5224a2 48%,#ff4a85 100%)',
+    accent: '#ec73d5',
+    symbol: '◈',
+    sourceName: 'bkcore · MIT licensed',
+    sourceUrl: 'https://hexgl.bkcore.com/play/',
+    embedUrl: 'https://hexgl.bkcore.com/play/',
+  },
+  {
+    slug: '10-bullets',
+    title: '10 Bullets',
+    genre: 'Arcade',
+    description: 'Time one perfect shot and set off a chain reaction in this quick-fire arcade challenge.',
+    tags: ['CrazyGames', 'New'],
+    artwork: 'linear-gradient(135deg,#191344,#5542b3 53%,#fc79ad)',
+    accent: '#bf9dff',
+    symbol: '▧',
+    added: true,
+    sourceName: 'CrazyGames',
+    sourceUrl: 'https://www.crazygames.com/embed/10-bullets-html-5',
+    embedUrl: 'https://www.crazygames.com/embed/10-bullets-html-5',
+  },
+  {
+    slug: 'territorial-io',
+    title: 'Territorial.io',
+    genre: 'Strategy',
+    description: 'Expand your territory, balance your growth, and compete for control of the map.',
+    tags: ['Multiplayer', 'Play on source'],
+    artwork: 'linear-gradient(135deg,#14365c,#267cb4 52%,#a9e1f5)',
+    accent: '#73d6ff',
+    symbol: '✦',
+    sourceName: 'Territorial.io',
+    sourceUrl: 'https://territorial.io/',
+  },
+  {
+    slug: 'openfront',
+    title: 'OpenFront',
+    genre: 'Strategy',
+    description: 'A real-time strategy game about diplomacy, expansion, and competing fronts.',
+    tags: ['Multiplayer', 'Play on source'],
+    artwork: 'linear-gradient(135deg,#102f37,#197b83 54%,#b1dfb5)',
+    accent: '#78e7d0',
+    symbol: '⬡',
+    sourceName: 'OpenFront',
+    sourceUrl: 'https://openfront.io/',
+  },
 ]
 
 export const categories = ['All', 'Action', 'Adventure', 'Arcade', 'Puzzle', 'Strategy', 'Sports', 'Racing', 'Multiplayer', 'HTML5']
