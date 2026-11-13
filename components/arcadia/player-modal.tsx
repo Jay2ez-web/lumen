@@ -5,6 +5,7 @@ import { Expand, ExternalLink, Flag, RotateCcw, X } from 'lucide-react'
 import { sourceTypeLabel, type Game } from '@/lib/games'
 
 const allowedGameOrigins = new Set([
+  'https://databallr.com',
   'https://play.eaglercraftranked.com',
   'https://territorial.io',
   'https://littlealchemy.com',
